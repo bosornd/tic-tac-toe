@@ -1,7 +1,3 @@
-// Copyright 2022, the Flutter project authors. Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +6,7 @@ import '../in_app_purchase/in_app_purchase.dart';
 import '../player_progress/player_progress.dart';
 import '../style/palette.dart';
 import '../style/responsive_screen.dart';
+import '../style/rough/button.dart';
 import 'custom_name_dialog.dart';
 import 'settings.dart';
 
@@ -62,8 +59,6 @@ class SettingsScreen extends StatelessWidget {
                 builder: (context, inAppPurchase, child) {
               if (inAppPurchase == null) {
                 // In-app purchases are not supported yet.
-                // Go to lib/main.dart and uncomment the lines that create
-                // the InAppPurchaseController.
                 return const SizedBox.shrink();
               }
 
@@ -92,19 +87,25 @@ class SettingsScreen extends StatelessWidget {
                 context.read<PlayerProgress>().reset();
 
                 final messenger = ScaffoldMessenger.of(context);
+                messenger.clearSnackBars();
                 messenger.showSnackBar(
                   const SnackBar(
                       content: Text('Player progress has been reset.')),
                 );
               },
             ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+              child: Text('Music by Mr Smith, used with permission.'),
+            ),
             _gap,
           ],
         ),
-        rectangularMenuArea: FilledButton(
-          onPressed: () {
+        rectangularMenuArea: RoughButton(
+          onTap: () {
             GoRouter.of(context).pop();
           },
+          textColor: palette.ink,
           child: const Text('Back'),
         ),
       ),
@@ -169,19 +170,14 @@ class _SettingsLine extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: Text(
-                title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+            Text(title,
                 style: const TextStyle(
                   fontFamily: 'Permanent Marker',
                   fontSize: 30,
-                ),
-              ),
-            ),
+                )),
+            const Spacer(),
             icon,
           ],
         ),
